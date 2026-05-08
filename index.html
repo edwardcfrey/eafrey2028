@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Edward Frey · Springboard · Class of 2028</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-adapter-moment/1.0.1/chartjs-adapter-moment.min.js"></script>
+<style>
+:root{
+  --bg:#07101F; --card:#0D1F3C; --cell:#112244; --bdr:#1E3A5F;
+  --gold:#FFB800; --gold2:#FFD060; --blue:#4A9EFF; --red:#FF6B6B; --green:#00C896;
+  --w:#FFFFFF;
+  --mu:rgba(255,255,255,0.72);
+  --mu2:rgba(255,255,255,0.58);
+  --di:rgba(255,255,255,0.40);
+  --fh:'Barlow Condensed', sans-serif;
+  --fb:'DM Sans', sans-serif;
+  --fm:'JetBrains Mono', monospace;
+  --max:480px; --pad:20px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--w);font-family:var(--fb);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{overflow-x:hidden}
+.page{max-width:var(--max);margin:0 auto;position:relative;background:var(--bg)}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+/* ======== STICKY NAV ======== */
+.snav{position:fixed;top:0;left:50%;transform:translate(-50%,-110%);width:100%;max-width:var(--max);
+  background:rgba(7,16,31,0.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,184,0,0.2);z-index:50;
+  padding:10px 16px;display:flex;align-items:center;justify-content:space-between;
+  transition:transform .35s ease}
+.snav.show{transform:translate(-50%,0)}
+.snav .nm{font-family:var(--fh);font-weight:700;font-size:20px;line-height:1}
+.snav .sb{font-size:10px;color:var(--mu);letter-spacing:.6px;margin-top:2px}
+.snav .nbtn{background:var(--gold);color:var(--bg);font-weight:700;font-size:13px;
+  padding:9px 14px;border-radius:6px;letter-spacing:.4px}
+
+/* ======== HERO ======== */
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:32px var(--pad) 28px;overflow:hidden;
+  background:
+    radial-gradient(60% 40% at 80% 12%, rgba(255,184,0,0.16), transparent 70%),
+    radial-gradient(70% 50% at 10% 85%, rgba(74,158,255,0.18), transparent 70%),
+    var(--bg);
+}
+.hero::before{content:"";position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,0.04) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,0.04) 1px,transparent 1px);
+  background-size:32px 32px;mask-image:radial-gradient(70% 80% at 50% 40%,#000 30%,transparent 80%);
+  -webkit-mask-image:radial-gradient(70% 80% at 50% 40%,#000 30%,transparent 80%);
+  pointer-events:none}
+.hero::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(120% 60% at 50% 100%, rgba(7,16,31,0.95) 0%, transparent 60%);
+  pointer-events:none}
+.hero-top{position:absolute;top:24px;left:var(--pad);right:var(--pad);display:flex;justify-content:space-between;align-items:center;z-index:2}
+.brand{font-family:var(--fm);font-size:10px;color:var(--di);letter-spacing:1.5px;text-transform:uppercase}
+.update{font-family:var(--fm);font-size:10px;color:var(--mu2);letter-spacing:.6px}
+.update b{color:var(--gold);font-weight:500}
+
+.h-content{position:relative;z-index:2;display:flex;flex-direction:column;gap:18px}
+.tag{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;
+  background:rgba(0,200,150,0.12);border:1px solid rgba(0,200,150,0.45);
+  font-size:11px;font-weight:600;letter-spacing:.6px;color:var(--green);text-transform:uppercase;width:fit-content}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(0,200,150,.7);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(0,200,150,.7)}70%{box-shadow:0 0 0 10px rgba(0,200,150,0)}100%{box-shadow:0 0 0 0 rgba(0,200,150,0)}}
+
+.h-name{font-family:var(--fh);font-weight:900;font-size:clamp(52px,14vw,72px);line-height:1.02;letter-spacing:-.5px;
+  background:linear-gradient(180deg,#fff 0%,rgba(255,255,255,0.78) 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;margin:0;padding-bottom:4px}
+.h-sub{font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mu);margin-top:-4px}
+.h-sub b{color:var(--gold);font-weight:700;letter-spacing:1.2px}
+
+.h-highlights-head{font-family:var(--fh);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-top:10px;padding-bottom:6px;border-bottom:1px solid var(--bdr)}
+.h-highlights{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.hl{padding:12px 12px;background:rgba(13,31,60,0.6);border:1px solid var(--bdr);border-radius:10px;
+  display:flex;flex-direction:column;gap:4px;backdrop-filter:blur(6px)}
+.hl .lbl{font-size:9px;font-weight:600;letter-spacing:1px;color:var(--di);text-transform:uppercase;font-family:var(--fb)}
+.hl .val{font-family:var(--fh);font-size:22px;font-weight:800;line-height:1;color:var(--w);display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.hl .val .avg{font-family:var(--fb);font-size:11px;font-weight:500;color:var(--mu);letter-spacing:.2px}
+.hl .meta{font-size:10px;color:var(--mu);font-weight:500}
+.hl.gold .val{color:var(--gold)}
+.hl.blue .val{color:var(--blue)}
+
+.h-ctas{display:flex;gap:10px;margin-top:6px}
+.btn{flex:1;padding:14px 16px;border-radius:8px;font-weight:700;font-size:13px;letter-spacing:.4px;
+  display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px}
+.btn.primary{background:var(--gold);color:var(--bg)}
+.btn.primary:hover{background:var(--gold2)}
+.btn.ghost{background:transparent;color:var(--w);border:1px solid var(--bdr)}
+.btn.ghost:hover{border-color:rgba(255,184,0,0.5)}
+
+.scroll-hint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--di);
+  letter-spacing:1.5px;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--fm)}
+.scroll-hint .arrow{animation:bob 1.6s ease-in-out infinite;font-size:14px}
+@keyframes bob{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(4px);opacity:1}}
+
+/* ======== SECTIONS ======== */
+section{padding:36px var(--pad) 8px}
+.s-title{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px}
+.s-title h2{font-family:var(--fh);font-weight:800;font-size:22px;letter-spacing:.4px;margin:0}
+.s-title .num{font-family:var(--fm);font-size:10px;color:var(--di);letter-spacing:1.5px}
+.s-sub{font-size:11px;color:var(--mu);font-weight:500;margin:-8px 0 14px}
+.s-sub b{color:var(--w);font-weight:600}
+
+/* ======== PROFILE CARD ======== */
+.profile{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.p-row1{display:flex;gap:14px;align-items:center}
+.avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#0D1F3C,#1E3A5F);
+  border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;
+  font-family:var(--fh);font-weight:800;font-size:22px;color:var(--gold);flex-shrink:0;letter-spacing:.5px}
+.p-name{font-family:var(--fh);font-weight:700;font-size:22px;line-height:1;letter-spacing:.2px}
+.p-stats{display:flex;gap:8px;font-size:11px;color:var(--mu);margin-top:5px;font-weight:500}
+.p-stats span+span::before{content:"·";margin-right:8px;color:var(--di)}
+.p-pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{padding:6px 10px;background:var(--cell);border:1px solid var(--bdr);border-radius:8px;
+  font-size:11px;color:var(--mu);font-weight:500}
+.pill b{color:var(--w);font-weight:600}
+.p-coaches-head{font-family:var(--fh);font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);padding-top:12px;padding-bottom:6px;border-top:1px solid var(--bdr)}
+.p-coaches{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.coach-col{display:flex;flex-direction:column;gap:3px;font-size:12px}
+.coach-col .nm{color:var(--w);font-weight:600;line-height:1.3}
+.coach-col .org{color:var(--mu);font-size:11px;line-height:1.35}
+
+/* ======== KPI STRIP ======== */
+.kpis{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:0 var(--pad) 6px;margin:0 calc(-1*var(--pad));scrollbar-width:none}
+.kpis::-webkit-scrollbar{display:none}
+.kpi{flex:0 0 158px;background:var(--card);border:1px solid var(--bdr);border-radius:12px;
+  padding:14px;display:flex;flex-direction:column;gap:6px;scroll-snap-align:start;position:relative;overflow:hidden}
+.kpi::after{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--col,var(--gold))}
+.kpi .lbl{font-size:8px;font-weight:600;letter-spacing:1px;color:var(--di);text-transform:uppercase}
+.kpi .val{font-family:var(--fh);font-weight:800;font-size:38px;line-height:1;color:var(--col,var(--gold))}
+.kpi .ctx{font-size:10px;color:var(--mu);font-weight:500;line-height:1.35}
+.kpi .delta{font-size:10px;color:var(--green);font-weight:600;font-family:var(--fm);letter-spacing:.3px}
+.kpi .delta.neg{color:var(--red)}
+
+/* ======== CHART BLOCK ======== */
+.chart-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px}
+.chart-head .label{font-size:10px;font-weight:700;letter-spacing:1.2px;color:var(--col,var(--blue));text-transform:uppercase;font-family:var(--fb)}
+.chart-head .sub{font-size:11px;color:var(--mu);font-weight:500;margin-top:3px}
+.toggle{display:inline-flex;background:var(--cell);border:1px solid var(--bdr);border-radius:999px;padding:3px;gap:0}
+.toggle button{padding:6px 12px;font-size:10px;font-weight:600;letter-spacing:.6px;color:var(--mu);border-radius:999px;min-width:44px;font-family:var(--fb)}
+.toggle button.active{background:var(--col,var(--blue));color:var(--bg)}
+.chart-wrap{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:14px;position:relative}
+.chart-wrap .canvas-box{height:200px;position:relative}
+.chart-foot{display:flex;align-items:center;gap:14px;font-size:10px;color:var(--mu);margin-top:10px;flex-wrap:wrap}
+.chart-foot .lg{display:flex;align-items:center;gap:6px}
+.chart-foot .swatch{width:10px;height:10px;border-radius:50%}
+.chart-foot .swatch.open{background:transparent;border:1.5px solid currentColor}
+
+/* ======== HEATMAP ======== */
+.hm-controls{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px;flex-wrap:wrap}
+.toggle button:disabled{opacity:.3;cursor:not-allowed}
+.hm-wrap{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:12px;
+  overflow-x:auto;scrollbar-width:thin}
+.hm-wrap::-webkit-scrollbar{height:6px}
+.hm-wrap::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
+.hm{display:grid;gap:3px;font-family:var(--fb)}
+.hm .hh{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  font-size:9px;font-weight:600;letter-spacing:.4px;text-align:center;padding:4px 2px;line-height:1.2;
+  border-radius:3px;min-height:48px}
+.hm .hh.gold{color:var(--gold)}
+.hm .hh.blue{color:var(--blue)}
+.hm .hh .nm{font-family:var(--fh);font-weight:700;font-size:11px}
+.hm .hh .dt{color:var(--mu2);font-weight:500;font-size:9px;margin-top:2px}
+.hm .hh .tier{font-family:var(--fm);font-size:8px;color:var(--di);letter-spacing:.5px;margin-top:1px}
+.hm .corner{padding:4px 6px}
+.hm .row-h{display:flex;flex-direction:column;justify-content:center;padding:0 6px;gap:1px;text-align:right}
+.hm .row-h .code{font-family:var(--fh);font-weight:700;font-size:13px;color:var(--w);letter-spacing:.3px;line-height:1}
+.hm .row-h .dd{font-size:10px;color:var(--mu);font-weight:500;line-height:1;font-family:var(--fb)}
+.hm .cat-label{grid-column:1/-1;display:flex;align-items:center;gap:8px;padding:8px 4px 4px;
+  font-family:var(--fm);font-size:9px;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;font-weight:500}
+.hm .cat-label::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(255,184,0,0.4),transparent)}
+.hm .cell{height:30px;border-radius:4px;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:600;font-family:var(--fb);position:relative;cursor:default}
+.hm .cell.empty{background:#182838}
+.hm .cell.fail{background:#FF4B4B;color:#fff}
+.hm .cell .pr{position:absolute;top:-3px;right:-2px;font-size:9px;color:var(--gold);text-shadow:0 0 4px rgba(0,0,0,0.6)}
+.hm .pb-col{font-family:var(--fh);font-weight:800;color:var(--gold);background:rgba(255,184,0,0.08);border:1px solid rgba(255,184,0,0.3)}
+.hm .pb-h{color:var(--gold);text-transform:uppercase;font-family:var(--fm);font-size:9px;letter-spacing:1px;font-weight:600}
+.hm .avg-h{color:var(--di);font-family:var(--fm);font-size:9px;letter-spacing:1px;text-transform:uppercase;text-align:right;padding:0 6px;font-weight:500}
+.hm .avg-cell{background:rgba(74,158,255,0.08);border:1px solid rgba(74,158,255,0.2);color:var(--blue);font-family:var(--fh);font-weight:700}
+
+/* ======== ACADEMICS ======== */
+.acc{background:var(--card);border:1px solid var(--bdr);border-radius:12px;overflow:hidden}
+.acc-head{padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;width:100%;text-align:left}
+.acc-head .l{display:flex;align-items:center;gap:14px}
+.acc-head .gpa{font-family:var(--fh);font-weight:800;font-size:30px;line-height:1;color:var(--w)}
+.acc-head .info{display:flex;flex-direction:column;gap:2px}
+.acc-head .info .t{font-size:13px;font-weight:600}
+.acc-head .info .s{font-size:10px;color:var(--mu);letter-spacing:.4px}
+.chev{width:14px;height:14px;border-right:1.5px solid var(--mu);border-bottom:1.5px solid var(--mu);
+  transform:rotate(45deg);transition:transform .3s ease;margin-bottom:4px}
+.acc.open .chev{transform:rotate(-135deg);margin-bottom:0;margin-top:4px}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.acc.open .acc-body{max-height:2400px}
+.acc-inner{padding:0 16px 18px;display:flex;flex-direction:column;gap:14px;border-top:1px solid var(--bdr);padding-top:16px}
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.statbox{background:var(--cell);border:1px solid var(--bdr);border-radius:10px;padding:12px}
+.statbox .lbl{font-size:9px;font-weight:600;letter-spacing:1px;color:var(--di);text-transform:uppercase}
+.statbox .val{font-family:var(--fh);font-weight:800;font-size:24px;line-height:1.1;margin-top:6px;color:var(--w)}
+.statbox .val.sm{font-size:14px;font-family:var(--fb);font-weight:600;letter-spacing:.3px;line-height:1.4}
+.statbox .ctx{font-size:10px;color:var(--mu);font-weight:500;margin-top:6px;line-height:1.4}
+.cgroup{display:flex;flex-direction:column;gap:8px}
+.cgroup .gh{font-family:var(--fm);font-size:10px;letter-spacing:1.2px;color:var(--mu);text-transform:uppercase;font-weight:500}
+.course{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--cell);border:1px solid var(--bdr);border-radius:8px}
+.course .nm{flex:1;font-size:12px;font-weight:500;color:var(--w);line-height:1.3}
+.course .nm small{display:block;color:var(--mu);font-weight:500;font-size:10px;letter-spacing:.3px;margin-top:1px}
+.course .gr{font-family:var(--fh);font-weight:700;font-size:14px;color:var(--w);min-width:24px;text-align:right}
+.badge{font-size:9px;font-weight:700;letter-spacing:.6px;padding:3px 7px;border-radius:4px;text-transform:uppercase;font-family:var(--fb)}
+.b-ap{background:rgba(74,158,255,0.18);color:var(--blue);border:1px solid rgba(74,158,255,0.4)}
+.b-en{background:rgba(74,158,255,0.10);color:#9bc6ff;border:1px solid rgba(74,158,255,0.25)}
+.b-st{background:var(--cell);color:var(--mu);border:1px solid var(--bdr)}
+.notes{font-size:11px;color:var(--mu);line-height:1.55;background:rgba(255,184,0,0.05);border-left:2px solid var(--gold);padding:10px 12px;border-radius:0 6px 6px 0}
+.notes b{color:var(--w);font-weight:600}
+
+/* ======== CONTACT ======== */
+.contact{background:var(--card);border:1px solid var(--bdr);border-radius:12px;padding:20px;
+  position:relative;overflow:hidden}
+.contact::before{content:"";position:absolute;inset:0;border-radius:12px;padding:1px;
+  background:linear-gradient(135deg,rgba(255,184,0,0.6),rgba(255,184,0,0.05) 40%,transparent);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.c-name{font-family:var(--fh);font-weight:800;font-size:30px;line-height:1;letter-spacing:.3px}
+.c-meta{font-size:11px;color:var(--mu);margin-top:8px;letter-spacing:.4px;font-weight:500}
+.c-meta b{color:var(--gold);font-weight:600}
+.c-actions{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.c-actions .btn{justify-content:flex-start;font-family:var(--fb)}
+.c-actions .btn .arr{margin-left:auto;font-family:var(--fm)}
+.c-actions .btn.blue{background:rgba(74,158,255,0.12);color:var(--blue);border:1px solid rgba(74,158,255,0.4)}
+.c-actions .btn.blue:hover{background:rgba(74,158,255,0.2)}
+.c-actions .btn.disabled{opacity:.4;cursor:not-allowed}
+
+/* ======== FOOTER ======== */
+footer{padding:32px var(--pad) 40px;color:var(--di);font-size:10px;line-height:1.7;letter-spacing:.3px;text-align:center;border-top:1px solid var(--bdr);margin-top:30px}
+footer b{color:var(--mu);font-weight:600}
+footer .row{display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
+footer .row span+span::before{content:"·";margin-right:6px;color:var(--bdr)}
+
+/* ======== TOOLTIP ======== */
+#tt{position:fixed;background:#0a1830;border:1px solid var(--bdr);border-radius:6px;padding:8px 10px;
+  font-size:11px;line-height:1.45;color:var(--w);pointer-events:none;z-index:100;
+  box-shadow:0 6px 20px rgba(0,0,0,0.5);max-width:240px;display:none;font-weight:500}
+#tt b{color:var(--gold);font-weight:600}
+#tt .blue{color:var(--blue)}
+#tt .red{color:var(--red)}
+#tt .mu{color:var(--mu);font-weight:500}
+
+/* loading */
+.loading{padding:80px 24px;text-align:center;color:var(--mu);font-family:var(--fm);font-size:12px;letter-spacing:1px}
+
+@media(min-width:520px){
+  .page{box-shadow:0 0 0 1px var(--bdr),0 30px 80px rgba(0,0,0,.5)}
+}
+</style>
+</head>
+<body>
+
+<nav class="snav" id="snav">
+  <div>
+    <div class="nm">Edward Frey</div>
+    <div class="sb">Springboard · Class of 2028</div>
+  </div>
+  <button class="nbtn" data-scroll="contact">Contact</button>
+</nav>
+
+<div class="page" id="page">
+
+<!-- HERO -->
+<section class="hero" id="hero" style="padding-top:0">
+  <div class="hero-top">
+    <span class="brand">EF · 2028 · 1M / 3M</span>
+    <span class="update">Updated <b id="hUpdate">—</b></span>
+  </div>
+  <div class="h-content">
+    <h1 class="h-name">Edward<br>Frey</h1>
+    <div class="h-sub">HS Sophomore Class of '28 · 1M &amp; 3M · <b>Edina, MN</b></div>
+    <div class="h-highlights-head">2026 Highlights</div>
+    <div class="h-highlights" id="hHighlights"></div>
+    <div class="h-ctas">
+      <button class="btn primary" id="btnReel">▶ Highlight Reel</button>
+      <button class="btn ghost" data-scroll="kpis">View Stats ↓</button>
+    </div>
+  </div>
+  <div class="scroll-hint"><span>Scroll</span><span class="arrow">↓</span></div>
+</section>
+
+<!-- PROFILE -->
+<section id="profile">
+  <div class="s-title"><h2>Profile</h2><span class="num">/01</span></div>
+  <div class="profile">
+    <div class="p-row1">
+      <div class="avatar">EF</div>
+      <div style="flex:1;min-width:0">
+        <div class="p-name">Edward Frey</div>
+        <div class="p-stats"><span>6′0″</span><span>165 lbs</span><span>Dec 2009</span></div>
+      </div>
+    </div>
+    <div class="p-coaches-head">Coaches</div>
+    <div class="p-coaches">
+      <div class="coach-col">
+        <div class="nm">Wenbo Chen, Manny Pollard</div>
+        <div class="org">Minnesota Diving Academy (MDA)</div>
+      </div>
+      <div class="coach-col">
+        <div class="nm">John Dailey</div>
+        <div class="org">Edina High School (EHS)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KPI STRIP -->
+<section id="kpis">
+  <div class="s-title"><h2>Season Bests</h2><span class="num">/02</span></div>
+  <div class="s-sub">Average per dive · current season (Grade 10)</div>
+  <div class="kpis" id="kpiStrip"></div>
+</section>
+
+<!-- USAD CHART -->
+<section id="usad">
+  <div class="s-title"><h2>USA Diving Trajectory</h2><span class="num">/03</span></div>
+  <div class="chart-wrap" style="--col:var(--blue)">
+    <div class="chart-head">
+      <div>
+        <div class="label">USA Diving</div>
+        <div class="sub">Regional, Zone, and National competition</div>
+      </div>
+      <div class="toggle" data-board="usad">
+        <button data-b="1M">1M</button>
+        <button data-b="3M">3M</button>
+        <button data-b="BOTH" class="active">BOTH</button>
+      </div>
+    </div>
+    <div class="canvas-box"><canvas id="cUsad"></canvas></div>
+    <div class="chart-foot">
+      <span class="lg" style="color:var(--blue)"><span class="swatch" style="background:var(--blue)"></span>1M</span>
+      <span class="lg" style="color:var(--gold)"><span class="swatch" style="background:var(--gold)"></span>3M</span>
+      <span class="lg" style="color:var(--red)"><span class="swatch open"></span>F · failed dive</span>
+    </div>
+  </div>
+</section>
+
+<!-- HEATMAP -->
+<section id="heat">
+  <div class="s-title"><h2>Dive Heatmap</h2><span class="num">/04</span></div>
+  <div class="s-sub">Recent Progression · per-meet score per dive</div>
+  <div class="hm-controls">
+    <div class="toggle" data-board="hmOrg" style="--col:var(--blue)">
+      <button data-o="HS">HS</button>
+      <button data-o="USAD" class="active">USAD</button>
+    </div>
+    <div class="toggle" data-board="hm" style="--col:var(--gold)">
+      <button data-b="1M" class="active">1M</button>
+      <button data-b="3M">3M</button>
+    </div>
+    <span style="font-family:var(--fm);font-size:9px;color:var(--di);letter-spacing:1px">SCROLL →</span>
+  </div>
+  <div class="hm-wrap"><div class="hm" id="hmGrid"></div></div>
+</section>
+
+<!-- HS CHART -->
+<section id="hs">
+  <div class="s-title"><h2>High School Trajectory</h2><span class="num">/05</span></div>
+  <div class="chart-wrap" style="--col:var(--gold)">
+    <div class="chart-head">
+      <div>
+        <div class="label">High School — Minnesota State League</div>
+        <div class="sub">Volunteer judges · context only</div>
+      </div>
+      <div class="toggle" data-board="hs">
+        <button data-b="1M">1M</button>
+        <button data-b="3M">3M</button>
+        <button data-b="BOTH" class="active">BOTH</button>
+      </div>
+    </div>
+    <div class="canvas-box"><canvas id="cHs"></canvas></div>
+    <div class="chart-foot">
+      <span class="lg" style="color:var(--blue)"><span class="swatch" style="background:var(--blue)"></span>1M</span>
+      <span class="lg" style="color:var(--gold)"><span class="swatch" style="background:var(--gold)"></span>3M</span>
+      <span class="lg" style="color:var(--red)"><span class="swatch open"></span>F · failed dive</span>
+    </div>
+  </div>
+</section>
+
+<!-- ACADEMICS -->
+<section id="academics">
+  <div class="s-title"><h2>Academics</h2><span class="num">/06</span></div>
+  <div class="acc" id="acc">
+    <button class="acc-head" id="accHead">
+      <div class="l">
+        <div class="gpa" id="accGpa">3.94</div>
+        <div class="info">
+          <div class="t">GPA · AP Chemistry · Upward Trend</div>
+          <div class="s">Tap to expand coursework &amp; planning</div>
+        </div>
+      </div>
+      <div class="chev"></div>
+    </button>
+    <div class="acc-body">
+      <div class="acc-inner" id="accInner"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="s-title"><h2>Contact</h2><span class="num">/07</span></div>
+  <div class="contact">
+    <div class="c-name">Edward Frey</div>
+    <div class="c-meta">Springboard · 1M &amp; 3M · Class of <b>2028</b> · Minneapolis, MN</div>
+    <div class="c-actions">
+      <a class="btn primary" href="/cdn-cgi/l/email-protection#e2878490879bd0d2d0daa2858f838b8ecc818d8f"><span class="__cf_email__" data-cfemail="a2c7c4d0c7db9092909ae2c5cfc3cbce8cc1cdcf">[email&#160;protected]</span><span class="arr">→</span></a>
+      <button class="btn ghost disabled">Phone — available on request<span class="arr">·</span></button>
+      <button class="btn blue" id="btnReel2">Highlight Reel<span class="arr">▶</span></button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="row"><span><b>Edward Frey</b></span><span>Edina High School</span><span>Minnesota Diving Academy</span></div>
+  <div class="row" style="margin-top:6px"><span>Coaches: Wenbo Chen · John Dailey</span></div>
+  <div class="row" style="margin-top:10px;font-family:var(--fm);font-size:9px;letter-spacing:1.5px"><span id="fUpdate">—</span></div>
+</footer>
+
+</div>
+
+<div id="tt"></div>
+<div id="loading" class="loading">Loading data…</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="app.js"></script>
+</body>
+</html>
