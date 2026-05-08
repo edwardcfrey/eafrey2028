@@ -258,6 +258,18 @@ footer .row span+span::before{content:"·";margin-right:6px;color:var(--bdr)}
 
 @media(min-width:520px){
   .page{box-shadow:0 0 0 1px var(--bdr),0 30px 80px rgba(0,0,0,.5)}
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 60% 100% at 50% 50%,
+      transparent 40%,
+      rgba(0,0,0,0.6) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
 }
 </style>
 </head>
